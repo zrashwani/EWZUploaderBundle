@@ -8,7 +8,7 @@
 
         'attr' => array(
             'data-max-size'     => $max_size,
-            'data-mime-types'   => $mime_types,
+            'data-mime-types'   => json_encode($mime_types),
             'data-folder'       => $folder,
             'data-url-upload'   => $url_upload,
             'data-url-remove'   => $url_remove,

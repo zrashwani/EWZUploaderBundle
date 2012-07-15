@@ -16,6 +16,7 @@
             <tag name="form.type" alias="ewz_uploader" />
             <argument type="service" id="router" />
             <argument key="media">%ewz_uploader.media%</argument>
+            <argument key="url">%ewz_uploader.url%</argument>
         </service>
 
         <service id="ewz_uploader_helper" class="%ewz_uploader_helper.class%">

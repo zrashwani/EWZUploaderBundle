@@ -29,15 +29,24 @@ class UploaderType extends AbstractType
     protected $media;
 
     /**
+     * The url's settings
+     *
+     * @var array
+     */
+    protected $url;
+
+    /**
      * Construct.
      *
      * @param Router $router An Router instance
      * @param array  $media  Media configuration values
+     * @param array  $url    Url's configuration values
      */
-    public function __construct(Router $router, array $media = array())
+    public function __construct(Router $router, array $media = array(), array $url = array())
     {
         $this->router = $router;
         $this->media  = $media;
+        $this->url    = $url;
     }
 
     /**
@@ -63,11 +72,11 @@ class UploaderType extends AbstractType
         $resolver->setDefaults(array(
             'compound' => false,
             'max_size'     => null, //$this->media['max_size'],
-            'mime_types'   => null, //json_encode($this->media['mime_types']),
+            'mime_types'   => null, //$this->media['mime_types'],
             'folder'       => null, //$this->media['folder'],
-            'url_upload'   => $this->router->generate('ewz_uploader_file_upload'),
-            'url_remove'   => $this->router->generate('ewz_uploader_file_remove'),
-            'url_download' => $this->router->generate('ewz_uploader_file_download'),
+            'url_upload'   => $this->router->generate($this->media['upload']),
+            'url_remove'   => $this->router->generate($this->media['remove']),
+            'url_download' => $this->router->generate($this->media['download']),
         ));
     }
 

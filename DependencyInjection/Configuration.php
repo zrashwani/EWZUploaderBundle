@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->booleanNode('load_jquery')->defaultFalse()->end()
+
                 ->arrayNode('media')
                     ->addDefaultsIfNotSet()
                     ->canBeUnset()
@@ -33,6 +34,16 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('dir')->defaultValue('%kernel.root_dir%/../web')->end()
                         ->scalarNode('folder')->defaultValue('uploads')->end()
+                    ->end()
+                ->end()
+
+                ->arrayNode('url')
+                    ->addDefaultsIfNotSet()
+                    ->canBeUnset()
+                    ->children()
+                        ->scalarNode('upload')->defaultValue('ewz_uploader_file_upload')->end()
+                        ->scalarNode('remove')->defaultValue('ewz_uploader_file_remove')->end()
+                        ->scalarNode('download')->defaultValue('ewz_uploader_file_download')->end()
                     ->end()
                 ->end()
             ->end()

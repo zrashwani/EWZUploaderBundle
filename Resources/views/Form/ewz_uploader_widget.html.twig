@@ -8,7 +8,7 @@
         {% set full_name = 'uploader_' ~ full_name %}
         {% set attr = {
             'data-max-size'     : form.getVar('max_size'),
-            'data-mime-types'   : form.getVar('mime_types'),
+            'data-mime-types'   : form.getVar('mime_types')|json_encode,
             'data-folder'       : form.getVar('folder'),
             'data-url-upload'   : form.getVar('url_upload'),
             'data-url-remove'   : form.getVar('url_remove'),
