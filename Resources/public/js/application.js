@@ -70,6 +70,16 @@
         // bindings
         var instance = this;
 
+        this.getElement('.filename a').bind('click', function () {
+            if ($(this).attr('href') == '#') {
+                $(this).attr('href', instance.url.download + '?' + $.param({
+                    filename: $('#' + instance.selector.attr('id').substring(9)).val(),
+                    folder: instance.data.folder
+                }));
+            }
+            return true;
+        });
+
         this.getElement('.remove').bind('click', function () {
             instance.loader();
             instance.getElement(instance.divObj.message).html('');
