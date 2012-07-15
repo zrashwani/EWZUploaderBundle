@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="ewz_uploader.form.type.class">EWZ\Bundle\UploaderBundle\Form\Type\UploaderType</parameter>
+
+        <parameter key="ewz_uploader_helper.class">EWZ\Bundle\UploaderBundle\Templating\Helper\UploaderHelper</parameter>
+        <parameter key="ewz_uploader_extension.class">EWZ\Bundle\UploaderBundle\Twig\Extension\UploaderExtension</parameter>
+    </parameters>
+
+    <services>
+        <service id="ewz_uploader.form.type" class="%ewz_uploader.form.type.class%">
+            <tag name="form.type" alias="ewz_uploader" />
+            <argument type="service" id="router" />
+            <argument key="media">%ewz_uploader.media%</argument>
+        </service>
+
+        <service id="ewz_uploader_helper" class="%ewz_uploader_helper.class%">
+            <tag name="templating.helper" alias="ewz_uploader" />
+            <argument type="service" id="templating" />
+            <argument key="loadJQuery">%ewz_uploader.load_jquery%</argument>
+        </service>
+
+        <service id="ewz_uploader_extension" class="%ewz_uploader_extension.class%">
+            <tag name="twig.extension" />
+            <argument type="service" id="service_container" />
+        </service>
+    </services>
+</container>

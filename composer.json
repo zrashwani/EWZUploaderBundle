@@ -1,0 +1,22 @@
+{
+    "name": "excelwebzone/uploader-bundle",
+    "description": "This bundle enhances the Symfony2 file upload experience using AjaxUpload library",
+    "keywords": ["uploader"],
+    "homepage": "https://github.com/excelwebzone/EWZUploaderBundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michael H. Arieli",
+            "email": "excelwebzone@gmail.com",
+            "homepage": "http://excelwebzone.com/"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": "2.*"
+    },
+    "autoload": {
+        "psr-0": { "EWZ\\Bundle\\UploaderBundle": "" }
+    },
+    "target-dir": "EWZ/Bundle/UploaderBundle"
+}
