@@ -17,7 +17,7 @@ To install EWZUploaderBundle with Composer just add the following to your
     // ...
     require: {
         // ...
-        "ewz/uploader-bundle": "master-dev"
+        "excelwebzone/uploader-bundle": "master-dev"
     }
 }
 ```
