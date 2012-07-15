@@ -74,9 +74,9 @@ class UploaderType extends AbstractType
             'max_size'     => null, //$this->media['max_size'],
             'mime_types'   => null, //$this->media['mime_types'],
             'folder'       => null, //$this->media['folder'],
-            'url_upload'   => $this->router->generate($this->media['upload']),
-            'url_remove'   => $this->router->generate($this->media['remove']),
-            'url_download' => $this->router->generate($this->media['download']),
+            'url_upload'   => $this->router->generate($this->url['upload']),
+            'url_remove'   => $this->router->generate($this->url['remove']),
+            'url_download' => $this->router->generate($this->url['download']),
         ));
     }
 
