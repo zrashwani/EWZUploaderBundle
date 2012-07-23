@@ -42,7 +42,7 @@ register the new bundle:
 // in AppKernel::registerBundles()
 $bundles = array(
     // ...
-    new EWZ\UploaderBundle\EWZUploaderBundle(),
+    new EWZ\Bundle\UploaderBundle\EWZUploaderBundle(),
     // ...
 );
 ```
@@ -66,7 +66,7 @@ Then register the bundle with your kernel:
 // in AppKernel::registerBundles()
 $bundles = array(
     // ...
-    new EWZ\UploaderBundle\EWZUploaderBundle(),
+    new EWZ\Bundle\UploaderBundle\EWZUploaderBundle(),
     // ...
 );
 ```
