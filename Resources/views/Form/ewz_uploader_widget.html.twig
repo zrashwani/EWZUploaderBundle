@@ -7,12 +7,12 @@
         {% set id = 'uploader_' ~ id %}
         {% set full_name = 'uploader_' ~ full_name %}
         {% set attr = {
-            'data-max-size'     : form.getVar('max_size'),
-            'data-mime-types'   : form.getVar('mime_types')|json_encode,
-            'data-folder'       : form.getVar('folder'),
-            'data-url-upload'   : form.getVar('url_upload'),
-            'data-url-remove'   : form.getVar('url_remove'),
-            'data-url-download' : form.getVar('url_download'),
+            'data-max-size'     : form.vars.max_size,
+            'data-mime-types'   : form.vars.mime_types|json_encode,
+            'data-folder'       : form.vars.folder,
+            'data-url-upload'   : form.vars.url_upload,
+            'data-url-remove'   : form.vars.url_remove,
+            'data-url-download' : form.vars.url_download,
         } %}
         {{ block('form_widget_simple') }}
 

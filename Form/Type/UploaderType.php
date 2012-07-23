@@ -54,7 +54,7 @@ class UploaderType extends AbstractType
      */
     public function buildView(FormViewInterface $view, FormInterface $form, array $options)
     {
-        $view->addVars(array(
+        $view->vars = array_replace($view->vars, array(
             'max_size'     => $options['max_size'],
             'mime_types'   => $options['mime_types'],
             'folder'       => $options['folder'],
@@ -70,7 +70,7 @@ class UploaderType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'compound' => false,
+            'compound'     => false,
             'max_size'     => null, //$this->media['max_size'],
             'mime_types'   => null, //$this->media['mime_types'],
             'folder'       => null, //$this->media['folder'],
@@ -85,7 +85,7 @@ class UploaderType extends AbstractType
      */
     public function getParent()
     {
-        return 'field';
+        return 'form';
     }
 
     /**
