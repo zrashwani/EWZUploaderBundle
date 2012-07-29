@@ -21,7 +21,7 @@
         <span class="file-upload error"></span>
 
         <span class="remove" {% if value is not empty %}style="display:inline-block;"{% endif %}>(Remove)</span>
-        <span class="filename">{% if value is not empty %}<a href="#" target="_blank">{{ value }}</a>{% endif %}</span>
+        <span class="filename">{% if value is not empty %}{% if form.vars.url_download %}<a href="#" target="_blank">{{ value }}</a>{% else %}{{ value }}{% endif %}{% endif %}</span>
         <span class="message"></span>
     </div>
 {% endspaceless %}

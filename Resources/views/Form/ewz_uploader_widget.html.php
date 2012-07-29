@@ -21,6 +21,6 @@
     <span class="file-upload error"></span>
 
     <span class="remove" <?php if (!empty($value)): ?>style="display:inline-block;"<?php endif ?>>(Remove)</span>
-    <span class="filename"><?php if (!empty($value)): ?><a href="#" target="_blank"><?php echo $view->escape($value) ?></a><?php endif ?></span>
+    <span class="filename"><?php if (!empty($value)): ?><?php if ($url_download): ?><a href="#" target="_blank"><?php echo $view->escape($value) ?></a><?php else: ?><?php echo $view->escape($value) ?><?php endif ?><?php endif ?></span>
     <span class="message"></span>
 </div>

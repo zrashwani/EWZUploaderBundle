@@ -48,7 +48,7 @@
             urlRemove   : '/_uploader/file_remove',
             urlDownload : '/_uploader/file_download'
         }, function (key, value) {
-            if (typeof settings[key] == undefined || settings[key] == '') {
+            if (typeof settings[key] == undefined || (!settings[key] && key != 'urlDownload')) {
                 settings[key] = value;
             }
         });
@@ -159,7 +159,11 @@
 
                             if (json.data.filename) {
                                 instance.success();
-                                instance.getElement(instance.divObj.name).html('<a href="' + (instance.url.download ? instance.url.download + '?' + $.param({filename: json.data.filename, folder: instance.data.folder}) : '#') + '" target="_blank">' + json.data.filename + '</a>');
+                                instance.getElement(instance.divObj.name).html(
+	                                instance.url.download
+	                                ? '<a href="' + instance.url.download + '?' + $.param({filename: json.data.filename, folder: instance.data.folder}) + '" target="_blank">' + json.data.filename + '</a>'
+	                                : json.data.filename
+                                );
                                 instance.getElement(instance.divObj.remove).show();
 
                                 // set original form value with filename
