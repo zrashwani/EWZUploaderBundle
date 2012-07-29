@@ -115,6 +115,8 @@ ewz_uploader:
 **NOTE**:If you enabled `load_jquery` it will automatically include the library
 directly from Google API.
 
+**NOTE**:To disabled downloading files, just set `download: false`.
+
 Congratulations! You're ready!
 
 ## Basic Usage
@@ -169,6 +171,10 @@ Cool, now you are ready to add the form widget into your page:
 ```php
 <?php
 
+// load resources
+echo $view['ewz_uploader']->initialize();
+// ...
+
 $view['form']->setTheme($form, array('EWZUploaderBundle:Form'));
 
 echo $view['form']->widget($form['audio'], array(
@@ -184,6 +190,11 @@ echo $view['form']->widget($form['audio'], array(
 **Twig**:
 
 ```jinja
+{# load resources #}
+{{ ewz_uploader_initialize() }}
+{# ... #}
+
+
 {% form_theme form 'EWZUploaderBundle:Form:ewz_uploader_widget.html.twig' %}
 
 {{ form_widget(form.audio, { 'attr': {

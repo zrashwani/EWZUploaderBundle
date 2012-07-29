@@ -76,7 +76,7 @@ class UploaderType extends AbstractType
             'folder'       => null, //$this->media['folder'],
             'url_upload'   => $this->router->generate($this->url['upload']),
             'url_remove'   => $this->router->generate($this->url['remove']),
-            'url_download' => $this->router->generate($this->url['download']),
+            'url_download' => $this->url['download'] ? $this->router->generate($this->url['download']) : false,
         ));
     }
 
