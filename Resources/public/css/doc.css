@@ -1,0 +1,34 @@
+.uploader {
+    display:block;
+}
+.uploader .file-upload {
+    display:none;
+    position:relative;
+    margin-left:70px;
+    top:4px;
+    height:18px;
+    width:18px;
+    background-position:center center;
+    background-repeat:no-repeat;
+}
+.uploader .file-upload.loader {
+    background-image:url(../images/indicator.gif);
+}
+.uploader .file-upload.success {
+    background-image:url(../images/success.png);
+}
+.uploader .file-upload.error {
+    background-image:url(../images/error.png);
+}
+.uploader .filename,.uploader .message {
+    display:block;
+    margin-top:8px;
+}
+.uploader .message {
+    color:#9d261d;
+}
+.uploader .remove {
+    display:none;
+    color:#005580;
+    cursor:pointer;
+}

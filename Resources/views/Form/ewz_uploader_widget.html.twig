@@ -1,0 +1,28 @@
+{% block ewz_uploader_widget %}
+{% spaceless %}
+    {{ block('hidden_widget') }}
+
+    <div class="uploader">
+        {% set type = 'file' %}
+        {% set id = 'uploader_' ~ id %}
+        {% set full_name = 'uploader_' ~ full_name %}
+        {% set attr = {
+            'data-max-size'     : form.vars.max_size,
+            'data-mime-types'   : form.vars.mime_types|json_encode,
+            'data-folder'       : form.vars.folder,
+            'data-url-upload'   : form.vars.url_upload,
+            'data-url-remove'   : form.vars.url_remove,
+            'data-url-download' : form.vars.url_download,
+        } %}
+        {{ block('form_widget_simple') }}
+
+        <span class="file-upload loader"></span>
+        <span class="file-upload success"></span>
+        <span class="file-upload error"></span>
+
+        <span class="remove" {% if value is not empty %}style="display:inline-block;"{% endif %}>(Remove)</span>
+        <span class="filename">{% if value is not empty %}{% if form.vars.url_download %}<a href="#" target="_blank">{{ value }}</a>{% else %}{{ value }}{% endif %}{% endif %}</span>
+        <span class="message"></span>
+    </div>
+{% endspaceless %}
+{% endblock ewz_uploader_widget %}
