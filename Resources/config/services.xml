@@ -7,7 +7,6 @@
     <parameters>
         <parameter key="ewz_uploader.form.type.class">EWZ\Bundle\UploaderBundle\Form\Type\UploaderType</parameter>
 
-        <parameter key="ewz_uploader_helper.class">EWZ\Bundle\UploaderBundle\Templating\Helper\UploaderHelper</parameter>
         <parameter key="ewz_uploader_extension.class">EWZ\Bundle\UploaderBundle\Twig\Extension\UploaderExtension</parameter>
     </parameters>
 
@@ -19,15 +18,10 @@
             <argument key="url">%ewz_uploader.url%</argument>
         </service>
 
-        <service id="ewz_uploader_helper" class="%ewz_uploader_helper.class%">
-            <tag name="templating.helper" alias="ewz_uploader" />
-            <argument type="service" id="templating" />
-            <argument key="loadJQuery">%ewz_uploader.load_jquery%</argument>
-        </service>
-
         <service id="ewz_uploader_extension" class="%ewz_uploader_extension.class%">
             <tag name="twig.extension" />
-            <argument type="service" id="service_container" />
+            <argument key="autoInclude">%ewz_uploader.auto_include%</argument>
+            <argument key="basePath">%ewz_uploader.base_path%</argument>
         </service>
     </services>
 </container>

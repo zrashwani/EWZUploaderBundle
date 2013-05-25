@@ -100,7 +100,8 @@ default file permissions (like size and mime types):
 # app/config/config.yml
 
 ewz_uploader:
-    load_jquery: false
+    auto_include: true
+    base_path: 'bundles/ewzuploader'
     media:
         max_size: 5120k
         mime_types: ['audio/wav', 'audio/x-wav', 'audio/wave', 'audio/x-pn-wav']
@@ -111,9 +112,6 @@ ewz_uploader:
         remove: ewz_uploader_file_remove
         download: ewz_uploader_file_download
 ```
-
-**NOTE**:If you enabled `load_jquery` it will automatically include the library
-directly from Google API.
 
 **NOTE**:To disabled downloading files, just set `download: false`.
 

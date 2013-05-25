@@ -22,7 +22,8 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->booleanNode('load_jquery')->defaultFalse()->end()
+                ->booleanNode('auto_include')->defaultTrue()->end()
+                ->scalarNode('base_path')->defaultValue('bundles/ewzuploader')->end()
 
                 ->arrayNode('media')
                     ->addDefaultsIfNotSet()

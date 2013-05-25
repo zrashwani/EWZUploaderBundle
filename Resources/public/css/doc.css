@@ -1,10 +1,13 @@
 .uploader {
     display:block;
 }
+.uploader input[type=file] {
+    margin-right:10px;
+}
 .uploader .file-upload {
     display:none;
     position:relative;
-    margin-left:70px;
+    margin-right:10px;
     top:4px;
     height:18px;
     width:18px;
