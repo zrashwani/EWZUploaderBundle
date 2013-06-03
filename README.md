@@ -115,6 +115,16 @@ ewz_uploader:
 
 **NOTE**:To disabled downloading files, just set `download: false`.
 
+Also make sure to include bundle in your routing configuration file:
+
+```yaml
+# app/config/routing.yml
+
+ewz_uploader:
+    resource: "@EWZUploaderBundle/Controller/"
+    type:     annotation
+```
+
 Congratulations! You're ready!
 
 ## Basic Usage
