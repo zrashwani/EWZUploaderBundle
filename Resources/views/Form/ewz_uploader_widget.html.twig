@@ -26,5 +26,6 @@
         <span class="filename">{% if value is not empty %}{% if form.vars.url_download %}<a href="#" target="_blank">{{ value }}</a>{% else %}{{ value }}{% endif %}{% endif %}</span>
         <span class="message"></span>
     </div>
+    <script type="text/javascript">$('#{{ id }}').Uploader({});</script>
 {% endspaceless %}
 {% endblock ewz_uploader_widget %}
