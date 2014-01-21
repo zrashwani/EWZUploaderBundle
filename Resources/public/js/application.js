@@ -41,28 +41,31 @@
 
         settings = settings || {};
         $.each({
-            maxSize     : '1024k',
-            mimeTypes   : [],
-            folder      : '',
-            urlUpload   : '/_uploader/file_upload',
-            urlRemove   : '/_uploader/file_remove',
-            urlDownload : '/_uploader/file_download'
+            'max-size'     : '1024k',
+            'mime-types'   : [],
+            'folder'       : '',
+            'url-upload'   : '/_uploader/file_upload',
+            'url-remove'   : '/_uploader/file_remove',
+            'url-download' : '/_uploader/file_download'
         }, function (key, value) {
-            if (typeof settings[key] == undefined || (!settings[key] && key != 'urlDownload')) {
-                settings[key] = value;
+            if (typeof settings[key] == 'undefined') {
+                settings[key] = $(selector).attr('data-' + key)
+                    ? $(selector).data(key)
+                    : value
+                ;
             }
         });
 
         this.url = {
-            upload   : settings.urlUpload,
-            remove   : settings.urlRemove,
-            download : settings.urlDownload
+            upload   : settings['url-upload'],
+            remove   : settings['url-remove'],
+            download : settings['url-download']
         };
 
         this.data = {
-            maxSize   : settings.maxSize,
-            mimeTypes : settings.mimeTypes,
-            folder    : settings.folder
+            maxSize   : settings['max-size'],
+            mimeTypes : settings['mime-types'],
+            folder    : settings['folder']
         };
 
         this.init();
@@ -76,8 +79,11 @@
                     filename: $('#' + instance.selector.attr('id').substring(9)).val(),
                     folder: instance.data.folder
                 }));
+
+                return true;
             }
-            return true;
+
+            return false;
         });
 
         this.getElement('.remove').bind('click', function () {
