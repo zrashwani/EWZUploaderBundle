@@ -1,6 +1,6 @@
 {% block ewz_uploader_widget %}
 {% spaceless %}
-    {{ ewz_include_uploader() }}
+    {{ ewz_uploader_add_assets() }}
 
     {{ block('hidden_widget') }}
 
@@ -23,7 +23,23 @@
         <span class="file-upload error"></span>
 
         <span class="remove" {% if value is not empty %}style="display:inline-block;"{% endif %}>(Remove)</span>
-        <span class="filename">{% if value is not empty %}{% if form.vars.url_download %}<a href="#" target="_blank">{{ value }}</a>{% else %}{{ value }}{% endif %}{% endif %}</span>
+        <span class="filename">
+            {% if value is not empty %}
+                {% set image = value %}
+                {% if ewz_uploader_is_image(value) %}
+                    {% set url = form.vars.url_download %}
+                    {% if url|length == 0 %}
+                        {% set url = path('ewz_uploader_file_download') %}
+                    {% endif %}
+                    {% set image = '<img src="' ~ url ~ '?filename=' ~ value ~ '&folder=' ~ form.vars.folder ~ '" />' %}
+                {% endif %}
+                {% if form.vars.url_download %}
+                    <a href="#" target="_blank">{{ image|raw }}</a>
+                {% else %}
+                    {{ image|raw }}
+                {% endif %}
+            {% endif %}
+        </span>
         <span class="message"></span>
     </div>
     <script type="text/javascript">$('#{{ id }}').Uploader({});</script>

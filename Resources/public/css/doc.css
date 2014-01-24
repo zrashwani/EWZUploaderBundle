@@ -27,6 +27,9 @@
     display:block;
     margin-top:8px;
 }
+.uploader .filename img {
+    width:100px;
+}
 .uploader .message {
     color:#9d261d;
 }

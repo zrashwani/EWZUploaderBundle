@@ -200,7 +200,7 @@ echo $view['form']->widget($form['audio'], array(
 
 ```jinja
 {# load resources #}
-{{ ewz_include_uploader() }}
+{{ ewz_uploader_add_assets() }}
 {# ... #}
 
 

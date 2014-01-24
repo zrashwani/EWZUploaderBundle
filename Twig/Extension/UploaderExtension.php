@@ -7,7 +7,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class UploaderExtension extends \Twig_Extension
 {
     /**
-     * @var boolean
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * @var \Twig_Environment
+     */
+    private $environment;
+
+    /**
+     * @var Boolean
      */
     protected $autoInclude;
 
@@ -17,12 +27,15 @@ class UploaderExtension extends \Twig_Extension
     protected $basePath;
 
     /**
-     * @var \Twig_Environment
+     * Construct.
+     *
+     * @param ContainerInterface $container A ContainerInterface instance
+     * @param Boolean            $autoInclude Whether or not to automatically include assets
+     * @param string             $basePath    Base path to bundle
      */
-    private $environment;
-
-    public function __construct($autoInclude, $basePath)
+    public function __construct(ContainerInterface $container, $autoInclude, $basePath)
     {
+        $this->container = $container;
         $this->autoInclude = $autoInclude;
         $this->basePath = rtrim($basePath, '/');
     }
@@ -49,11 +62,15 @@ class UploaderExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'ewz_include_uploader' => new \Twig_Function_Method($this, 'includeUploader', array('is_safe' => array('html'))),
+            'ewz_uploader_add_assets' => new \Twig_Function_Method($this, 'addAssets', array('is_safe' => array('html'))),
+            'ewz_uploader_is_image' => new \Twig_Function_Method($this, 'isImage', array('is_safe' => array('html'))),
         );
     }
 
-    public function includeUploader()
+    /**
+     * Adds all related JavaScript and CSS assets.
+     */
+    public function addAssets()
     {
         if (!$this->environment->hasExtension('assets')) {
             return;
@@ -70,5 +87,19 @@ class UploaderExtension extends \Twig_Extension
 
             $this->autoInclude = false;
         }
+    }
+
+    /**
+     * Checks whether or not the file is an image or not.
+     *
+     * @param string $filename
+     *
+     * #return Boolean
+     */
+    public function isImage($filename)
+    {
+        $filepath = sprintf('%s/%s/%s', $this->container->getParameter('ewz_uploader.media.dir'), $this->container->getParameter('ewz_uploader.media.folder'), $filename);
+
+        return is_array(@getimagesize($filepath));
     }
 }
