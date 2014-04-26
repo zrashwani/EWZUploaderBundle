@@ -80,7 +80,7 @@ class UploaderController extends Controller
         }
         $directory = sprintf('%s/%s', $this->container->getParameter('ewz_uploader.media.dir'), $folder);
 
-        $file->move($directory, $filename = uniqid());
+        $file->move($directory, $filename = sprintf('%s.%s', uniqid(), $file->guessExtension()));
 
         return new Response(json_encode(array(
             'event' => 'uploader:success',
