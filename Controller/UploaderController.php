@@ -80,6 +80,12 @@ class UploaderController extends Controller
         }
         $directory = sprintf('%s/%s', $this->container->getParameter('ewz_uploader.media.dir'), $folder);
 
+        // create directory if doesn't exists
+        $filesystem = new Filesystem();
+        if ($filesystem->exists($directory)) {
+            $filesystem->mkdir($directory);
+        }
+
         $file->move($directory, $filename = sprintf('%s.%s', uniqid(), $file->guessExtension()));
 
         return new Response(json_encode(array(
