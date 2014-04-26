@@ -4,12 +4,10 @@ namespace EWZ\Bundle\UploaderBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
@@ -28,34 +26,31 @@ class UploaderController extends Controller
      * @param string|array $mimeTypes Mime types of the file
      *
      * @return Response A Response instance
-     *
-     * @Route("/file_upload", name="ewz_uploader_file_upload")
-     * @Method("POST")
      */
-    public function uploadAction()
+    public function uploadAction(Request $request)
     {
-        $file = $this->get('request')->files->get('file');
+        $file = $request->files->get('file');
 
         if (!$file instanceof UploadedFile || !$file->isValid()) {
             return new Response(json_encode(array(
                 'event' => 'uploader:error',
-                'data'  => array(
+                'data' => array(
                     'message' => 'Missing file.',
                 ),
             )));
         }
 
         // validate file size and mimetype
-        if (!$maxSize = $this->get('request')->request->get('maxSize')) {
+        if (!$maxSize = $request->get('maxSize')) {
             $maxSize = $this->container->getParameter('ewz_uploader.media.max_size');
         }
-        if (!$mimeTypes = $this->get('request')->request->get('mimeTypes')) {
+        if (!$mimeTypes = $request->get('mimeTypes')) {
             $mimeTypes = $this->container->getParameter('ewz_uploader.media.mime_types');
         }
         $mimeTypes = is_array($mimeTypes) ? $mimeTypes : json_decode($mimeTypes, true);
 
         $fileConst = new \Symfony\Component\Validator\Constraints\File(array(
-            'maxSize'   => $maxSize,
+            'maxSize' => $maxSize,
             'mimeTypes' => $mimeTypes,
         ));
 
@@ -63,7 +58,7 @@ class UploaderController extends Controller
         if (count($errors) > 0) {
             return new Response(json_encode(array(
                 'event' => 'uploader:error',
-                'data'  => array(
+                'data' => array(
                     'message' => 'Invalid file.',
                 ),
             )));
@@ -73,24 +68,25 @@ class UploaderController extends Controller
         if (!is_file($file->__toString())) {
             return new Response(json_encode(array(
                 'event' => 'uploader:error',
-                'data'  => array(
+                'data' => array(
                     'message' => 'File was not uploaded.',
                 ),
             )));
         }
 
         // set drop directory
-        if (!$folder = $this->get('request')->request->get('folder')) {
+        if (!$folder = $request->get('folder')) {
             $folder = $this->container->getParameter('ewz_uploader.media.folder');
         }
         $directory = sprintf('%s/%s', $this->container->getParameter('ewz_uploader.media.dir'), $folder);
 
-        $file->move($directory, $file->getClientOriginalName());
+        $file->move($directory, $filename = uniqid());
 
         return new Response(json_encode(array(
             'event' => 'uploader:success',
-            'data'  => array(
-                'filename' => $file->getClientOriginalName(),
+            'data' => array(
+                'orgname' => $file->getClientOriginalName(),
+                'filename' => $filename,
             ),
         )));
     }
@@ -102,29 +98,26 @@ class UploaderController extends Controller
      * @param string $folder   The target folder
      *
      * @return Response A Response instance
-     *
-     * @Route("/file_remove", name="ewz_uploader_file_remove")
-     * @Method("POST")
      */
-    public function removeAction()
+    public function removeAction(Request $request)
     {
         $response = new Response(null, 200, array(
             'Content-Type' => 'application/json',
         ));
 
-        if (!$filename = $this->get('request')->request->get('filename')) {
+        if (!$filename = $request->get('filename')) {
             $response->setStatusCode(500);
             $response->setContent(json_encode(array(
                 'event' => 'uploader:error',
-                'data'  => array(
+                'data' => array(
                     'message' => 'Invalid file.',
                 ),
-            )));    
+            )));
 
-            return $response;        
+            return $response;
         }
 
-        if (!$folder = $this->get('request')->request->get('folder')) {
+        if (!$folder = $request->get('folder')) {
             $folder = $this->container->getParameter('ewz_uploader.media.folder');
         }
         $filepath = sprintf('%s/%s/%s', $this->container->getParameter('ewz_uploader.media.dir'), $folder, $filename);
@@ -134,7 +127,7 @@ class UploaderController extends Controller
             $response->setStatusCode(500);
             $response->setContent(json_encode(array(
                 'event' => 'uploader:error',
-                'data'  => array(
+                'data' => array(
                     'message' => 'File was not uploaded.',
                 ),
             )));
@@ -148,7 +141,7 @@ class UploaderController extends Controller
 
         $response->setContent(json_encode(array(
             'event' => 'uploader:fileremoved',
-            'data'  => array(),
+            'data' => array(),
         )));
 
         return $response;
@@ -162,19 +155,16 @@ class UploaderController extends Controller
      *
      * @return Response A Response instance
      *
-     * @Route("/file_download", name="ewz_uploader_file_download")
-     * @Method("GET")
-     *
      * @throws FileException         If the file invalid
      * @throws FileNotFoundException If the file does not exist
      */
-    public function downloadAction()
+    public function downloadAction(Request $request)
     {
-        if (!$filename = $this->get('request')->query->get('filename')) {
+        if (!$filename = $request->get('filename')) {
             throw new FileException('Invalid file.');
         }
 
-        if (!$folder = $this->get('request')->query->get('folder')) {
+        if (!$folder = $request->get('folder')) {
             $folder = $this->container->getParameter('ewz_uploader.media.folder');
         }
 
@@ -187,7 +177,7 @@ class UploaderController extends Controller
         $content = file_get_contents($filepath);
 
         return new Response($content, 200, array(
-            'Content-Type'        => $file->getMimeType(),
+            'Content-Type' => $file->getMimeType(),
             'Content-Disposition' => sprintf('attachment;filename=%s', $file->getFilename()),
         ));
     }

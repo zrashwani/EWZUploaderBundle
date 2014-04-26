@@ -121,8 +121,7 @@ Also make sure to include bundle in your routing configuration file:
 # app/config/routing.yml
 
 ewz_uploader:
-    resource: "@EWZUploaderBundle/Controller/"
-    type: annotation
+    resource: "@EWZUploaderBundle/Resources/config/routing.xml"
     prefix: /_uploader
 ```
 
