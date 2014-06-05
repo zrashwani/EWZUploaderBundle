@@ -82,7 +82,7 @@ class UploaderController extends Controller
 
         // create directory if doesn't exists
         $filesystem = new Filesystem();
-        if ($filesystem->exists($directory)) {
+        if (!$filesystem->exists($directory)) {
             $filesystem->mkdir($directory);
         }
 
