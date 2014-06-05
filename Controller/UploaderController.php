@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 
@@ -32,12 +33,12 @@ class UploaderController extends Controller
         $file = $request->files->get('file');
 
         if (!$file instanceof UploadedFile || !$file->isValid()) {
-            return new Response(json_encode(array(
+            return new JsonResponse(array(
                 'event' => 'uploader:error',
                 'data' => array(
                     'message' => 'Missing file.',
                 ),
-            )));
+            ));
         }
 
         // validate file size and mimetype
@@ -66,12 +67,12 @@ class UploaderController extends Controller
 
         // check if exists
         if (!is_file($file->__toString())) {
-            return new Response(json_encode(array(
+            return new JsonResponse(array(
                 'event' => 'uploader:error',
                 'data' => array(
                     'message' => 'File was not uploaded.',
                 ),
-            )));
+            ));
         }
 
         // set drop directory
@@ -88,13 +89,13 @@ class UploaderController extends Controller
 
         $file->move($directory, $filename = sprintf('%s.%s', uniqid(), $file->guessExtension()));
 
-        return new Response(json_encode(array(
+        return new JsonResponse(array(
             'event' => 'uploader:success',
             'data' => array(
                 'orgname' => $file->getClientOriginalName(),
                 'filename' => $filename,
             ),
-        )));
+        ));
     }
 
     /**
@@ -107,18 +108,16 @@ class UploaderController extends Controller
      */
     public function removeAction(Request $request)
     {
-        $response = new Response(null, 200, array(
-            'Content-Type' => 'application/json',
-        ));
+        $response = new JsonResponse();
 
         if (!$filename = $request->get('filename')) {
             $response->setStatusCode(500);
-            $response->setContent(json_encode(array(
+            $response->setContent(array(
                 'event' => 'uploader:error',
                 'data' => array(
                     'message' => 'Invalid file.',
                 ),
-            )));
+            ));
 
             return $response;
         }
@@ -131,12 +130,12 @@ class UploaderController extends Controller
         // check if exists
         if (!is_file($filepath)) {
             $response->setStatusCode(500);
-            $response->setContent(json_encode(array(
+            $response->setContent(array(
                 'event' => 'uploader:error',
                 'data' => array(
                     'message' => 'File was not uploaded.',
                 ),
-            )));
+            ));
 
             return $response;
         }
@@ -145,10 +144,10 @@ class UploaderController extends Controller
         $filesystem = new Filesystem();
         $filesystem->remove($filepath);
 
-        $response->setContent(json_encode(array(
+        $response->setContent(array(
             'event' => 'uploader:fileremoved',
             'data' => array(),
-        )));
+        ));
 
         return $response;
     }
