@@ -3,13 +3,11 @@
 namespace EWZ\Bundle\UploaderBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 
@@ -18,6 +16,20 @@ use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
  */
 class UploaderController extends Controller
 {
+    /**
+     * @param mixed   $data
+     * @param integer $status
+     * @param array   $headers
+     *
+     * @return Response with json encoded data
+     */
+    protected function renderJson($data, $status = 200, $headers = array())
+    {
+        $headers['Content-Type'] = 'application/json';
+
+        return new Response(json_encode($data), $status, $headers);
+    }
+
     /**
      * Uploads a file.
      *
@@ -33,12 +45,12 @@ class UploaderController extends Controller
         $file = $request->files->get('file');
 
         if (!$file instanceof UploadedFile || !$file->isValid()) {
-            return new JsonResponse(array(
+            return $this->renderJson(array(
                 'event' => 'uploader:error',
                 'data' => array(
                     'message' => 'Missing file.',
                 ),
-            ));
+            ), 500);
         }
 
         // validate file size and mimetype
@@ -57,22 +69,22 @@ class UploaderController extends Controller
 
         $errors = $this->get('validator')->validateValue($file, $fileConst);
         if (count($errors) > 0) {
-            return new Response(json_encode(array(
+            return $this->renderJson(array(
                 'event' => 'uploader:error',
                 'data' => array(
                     'message' => 'Invalid file.',
                 ),
-            )));
+            ), 500);
         }
 
         // check if exists
         if (!is_file($file->__toString())) {
-            return new JsonResponse(array(
+            return $this->renderJson(array(
                 'event' => 'uploader:error',
                 'data' => array(
                     'message' => 'File was not uploaded.',
                 ),
-            ));
+            ), 500);
         }
 
         // set drop directory
@@ -89,7 +101,7 @@ class UploaderController extends Controller
 
         $file->move($directory, $filename = sprintf('%s.%s', uniqid(), $file->guessExtension()));
 
-        return new JsonResponse(array(
+        return $this->renderJson(array(
             'event' => 'uploader:success',
             'data' => array(
                 'orgname' => $file->getClientOriginalName(),
@@ -104,22 +116,17 @@ class UploaderController extends Controller
      * @param string $filename The file name
      * @param string $folder   The target folder
      *
-     * @return Response A Response instance
+     * @return JsonResponse A Response instance
      */
     public function removeAction(Request $request)
     {
-        $response = new JsonResponse();
-
         if (!$filename = $request->get('filename')) {
-            $response->setStatusCode(500);
-            $response->setContent(array(
+            return $this->renderJson(array(
                 'event' => 'uploader:error',
                 'data' => array(
                     'message' => 'Invalid file.',
                 ),
-            ));
-
-            return $response;
+            ), 500);
         }
 
         if (!$folder = $request->get('folder')) {
@@ -129,27 +136,22 @@ class UploaderController extends Controller
 
         // check if exists
         if (!is_file($filepath)) {
-            $response->setStatusCode(500);
-            $response->setContent(array(
+            return $this->renderJson(array(
                 'event' => 'uploader:error',
                 'data' => array(
                     'message' => 'File was not uploaded.',
                 ),
-            ));
-
-            return $response;
+            ), 500);
         }
 
         // remove file
         $filesystem = new Filesystem();
         $filesystem->remove($filepath);
 
-        $response->setContent(array(
+        return $this->renderJson(array(
             'event' => 'uploader:fileremoved',
             'data' => array(),
         ));
-
-        return $response;
     }
 
     /**
