@@ -25,8 +25,6 @@ class UploaderController extends Controller
      */
     protected function renderJson($data, $status = 200, $headers = array())
     {
-        $headers['Content-Type'] = 'application/json';
-
         return new Response(json_encode($data), $status, $headers);
     }
 
