@@ -116,7 +116,7 @@ class UploaderController extends Controller
      * @param string $filename The file name
      * @param string $folder   The target folder
      *
-     * @return JsonResponse A Response instance
+     * @return Response A Response instance
      */
     public function removeAction(Request $request)
     {
