@@ -80,10 +80,14 @@ class UploaderExtension extends \Twig_Extension
             $path = $this->environment
                 ->getExtension('assets')
                 ->getAssetUrl($this->basePath);
-
-            echo sprintf('<link href="%s/css/doc.css" media="all" rel="stylesheet" type="text/css" />', $path);
-            echo sprintf('<script src="%s/js/external/ajaxupload/ajaxupload.min.js" type="text/javascript"></script>', $path);
-            echo sprintf('<script src="%s/js/application.js" type="text/javascript"></script>', $path);
+            
+            $urlParts = parse_url($path);
+            $pathPart = $urlParts['path'];
+            $queryPart = isset($urlParts['query'])===true?$urlParts['query']:'';
+            
+            echo sprintf('<link href="%s/css/doc.css%s" media="all" rel="stylesheet" type="text/css" />', $pathPart, $queryPart);
+            echo sprintf('<script src="%s/js/external/ajaxupload/ajaxupload.min.js%s" type="text/javascript"></script>', $pathPart, $queryPart);
+            echo sprintf('<script src="%s/js/application.js" type="text/javascript%s"></script>', $pathPart, $queryPart);
 
             $this->autoInclude = false;
         }
