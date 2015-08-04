@@ -83,7 +83,7 @@ class UploaderExtension extends \Twig_Extension
             
             $urlParts = parse_url($path);
             $pathPart = $urlParts['path'];
-            $queryPart = isset($urlParts['query'])===true?$urlParts['query']:'';
+            $queryPart = isset($urlParts['query'])===true?'?'.$urlParts['query']:'';
             
             echo sprintf('<link href="%s/css/doc.css%s" media="all" rel="stylesheet" type="text/css" />', $pathPart, $queryPart);
             echo sprintf('<script src="%s/js/external/ajaxupload/ajaxupload.min.js%s" type="text/javascript"></script>', $pathPart, $queryPart);
